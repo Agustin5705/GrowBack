@@ -6,6 +6,8 @@ export interface Product {
   name: string;
   price: number;
   stock: number;
+  image_url?: string;
+  description?: string;
 }
 
 @Injectable()
@@ -33,8 +35,15 @@ export class ProductsService {
     product: Omit<Product, 'id'> & { category_id?: number },
   ): Promise<Product> {
     const result = await this.pool.query(
-      'INSERT INTO products (name, price, stock, category_id) VALUES ($1, $2, $3, $4) RETURNING *',
-      [product.name, product.price, product.stock, product.category_id],
+      'INSERT INTO products (name, price, stock, category_id, image_url, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [
+        product.name,
+        product.price,
+        product.stock,
+        product.category_id,
+        product.image_url,
+        product.description,
+      ],
     );
     return result.rows[0];
   }
@@ -48,9 +57,19 @@ export class ProductsService {
      SET name = COALESCE($1, name), 
          price = COALESCE($2, price), 
          stock = COALESCE($3, stock), 
-         category_id = COALESCE($4, category_id) 
-     WHERE id = $5 RETURNING *`,
-      [product.name, product.price, product.stock, product.category_id, id],
+         category_id = COALESCE($4, category_id), 
+         image_url = COALESCE($5, image_url), 
+         description = COALESCE($6, description)
+     WHERE id = $7 RETURNING *`,
+      [
+        product.name,
+        product.price,
+        product.stock,
+        product.category_id,
+        product.image_url,
+        product.description,
+        id,
+      ],
     );
     return result.rows[0] || null;
   }
