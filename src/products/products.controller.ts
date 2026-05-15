@@ -9,6 +9,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ProductsService, Product } from './products.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -29,16 +31,19 @@ export class ProductsController {
   }
 
   @Post()
-  async create(@Body() body: Omit<Product, 'id'>): Promise<Product> {
-    return this.productsService.create(body);
+  async create(@Body() createProductDto: CreateProductDto): Promise<Product> {
+    return this.productsService.create(createProductDto);
   }
 
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() body: Partial<Omit<Product, 'id'>>,
+    @Body() updateProductDto: UpdateProductDto,
   ): Promise<Product> {
-    const product = await this.productsService.update(Number(id), body);
+    const product = await this.productsService.update(
+      Number(id),
+      updateProductDto,
+    );
     if (!product)
       throw new NotFoundException(`Product with id ${id} not found`);
     return product;
