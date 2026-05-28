@@ -8,12 +8,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { AdminService } from './admin/admin.service';
 import { AdminController } from './admin/admin.controller';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
     DatabaseModule,
     ProductsModule,
     OrdersModule,
+    PaymentsModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
