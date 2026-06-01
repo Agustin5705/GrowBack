@@ -7,8 +7,8 @@ export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @Post('create')
-  async createPayment(@Body() body: { items: any[] }) {
-    return this.paymentsService.createPreference(body.items);
+  async createPayment(@Body() body: { orderId: number; items: any[] }) {
+    return this.paymentsService.createPreference(body.orderId, body.items);
   }
 
   @Post('webhook')

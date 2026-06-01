@@ -60,7 +60,7 @@ export class OrdersService {
 
       const orderResult = await client.query(
         'INSERT INTO orders (total_price, status) VALUES ($1, $2) RETURNING *',
-        [total, 'paid'],
+        [total, 'pending'],
       );
       const order = orderResult.rows[0];
 

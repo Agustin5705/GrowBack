@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { Payment } from 'mercadopago';
+import { OrdersService } from 'src/orders/orders.service';
 
 @Injectable()
 export class PaymentsService {
   private preferenceClient: Preference;
 
-  constructor() {
+  constructor(private readonly ordersService: OrdersService) {
     const client = new MercadoPagoConfig({
       accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,
     });
@@ -14,7 +15,7 @@ export class PaymentsService {
     this.preferenceClient = new Preference(client);
   }
 
-  async createPreference(items: any[]) {
+  async createPreference(orderId: number, items: any[]) {
     const preference = {
       items: items.map((item) => ({
         id: String(item.product_id),
@@ -28,6 +29,7 @@ export class PaymentsService {
         pending: 'https://www.bing.com',
       },
       auto_return: 'approved',
+      external_reference: String(orderId),
     };
 
     const response = await this.preferenceClient.create({ body: preference });
@@ -45,6 +47,15 @@ export class PaymentsService {
       );
       const payment = await paymentClient.get({ id: paymentData.data.id });
       console.log('Pago validado:', payment);
+
+      const orderId = Number(payment.external_reference); // 👈 viene de la preferencia
+      const status = payment.status; // 'approved', 'rejected', 'pending'
+
+      // Actualizar orden en DB
+      if (orderId && status) {
+        await this.ordersService.updateStatus(orderId, status);
+        console.log(`Orden ${orderId} actualizada a estado ${status}`);
+      }
     }
   }
 }
