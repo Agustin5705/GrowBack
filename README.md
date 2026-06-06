@@ -1,98 +1,104 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Backend de Tienda (Concepto)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este proyecto es un **backend de e-commerce** desarrollado con **NestJS + PostgreSQL + MercadoPago**.  
+El objetivo era implementar un flujo completo de órdenes y pagos como un concepto funcional.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🚀 Tecnologías
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Framework:** NestJS
+- **Base de Datos:** PostgreSQL (vía Docker)
+- **Pasarela de Pagos:** MercadoPago SDK
+- **Herramientas de Red:** Ngrok (para pruebas de webhooks locales)
 
-## Project setup
+---
 
-```bash
-$ npm install
-```
+## 📂 Estructura del Proyecto
 
-## Compile and run the project
+- `orders` → Creación, gestión y actualización del estado de las órdenes.
+- `payments` → Integración con la API de MercadoPago y manejo de webhooks.
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## ⚙️ Configuración e Instalación
 
-# production mode
-$ npm run start:prod
-```
+1. **Clonar el repositorio:**
 
-## Run tests
+   git clone <URL_DE_TU_REPOSITORIO>
+   cd <NOMBRE_DE_LA_CARPETA>
 
-```bash
-# unit tests
-$ npm run test
+Instalar dependencias:
 
-# e2e tests
-$ npm run test:e2e
+npm install
 
-# test coverage
-$ npm run test:cov
-```
+Variables de entorno (.env):
 
-## Deployment
+Crea un archivo .env en la raíz del proyecto y configura las siguientes variables:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+DATABASE_URL=postgres://user:pass@localhost:5432/db
+MERCADOPAGO_ACCESS_TOKEN=TU_TOKEN_DE_MERCADOPAGO
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Levantar el backend en modo desarrollo:
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+npm run start:dev
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+📌 Endpoints Principales
 
-## Resources
+1. Crear Orden
+   Endpoint: POST /orders/create
 
-Check out a few resources that may come in handy when working with NestJS:
+Cuerpo de la petición (Body):
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+JSON
+{
+"items": [
+{ "product_id": 1, "quantity": 2 }
+]
+}
 
-## Support
+2. Crear Preferencia de Pago
+   Endpoint: POST /payments/create
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Cuerpo de la petición (Body):
 
-## Stay in touch
+JSON
+{
+"orderId": 123,
+"items": [
+{ "product_id": 1, "price": 100, "quantity": 2 }
+]
+} 3. Webhook de MercadoPago
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Endpoint: POST /payments/webhook
 
-## License
+Descripción: Recibe las notificaciones asíncronas de MercadoPago para actualizar el estado de la orden (pending, approved, rejected).
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+🔄 Flujo de Negocio
+
+El Cliente crea una orden en el sistema ➡️ La orden toma el estado inicial pending.
+
+Se genera la Preferencia de Pago en MercadoPago, vinculando el orderId en el parámetro external_reference.
+
+El Cliente realiza el pago en la interfaz de MercadoPago.
+
+MercadoPago envía una notificación (Webhook) al backend.
+
+El Backend consulta el estado del pago y actualiza la orden correspondiente a approved o rejected.
+
+🧪 Pruebas Locales
+
+Para probar el flujo completo de pagos desde tu entorno local:
+
+Utilizar el Sandbox de MercadoPago: Asegúrate de usar las credenciales de prueba y tarjetas de test proporcionadas por MercadoPago.
+
+Exponer el Backend local: Dado que MercadoPago necesita una URL pública para enviar los webhooks, expón tu puerto local usando Ngrok:
+
+ngrok http 3000
+
+Configurar el Webhook: Copia la URL generada por Ngrok y configúrala en el panel de desarrolladores de MercadoPago apuntando al endpoint correspondiente:
+
+https://<TU_SUBDOMINIO_NGROK>.ngrok.io/payments/webhook
+
+📌 Estado del Proyecto
+Este backend se desarrolló exclusivamente como un concepto funcional. No cuenta con una interfaz de usuario (frontend) ni despliegue en producción, pero implementa de manera estricta y funcional todo el flujo lógico de órdenes y pasarela de pagos.
